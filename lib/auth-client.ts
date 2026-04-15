@@ -4,5 +4,10 @@ export const authClient = createAuthClient({
     baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
     fetchOptions: {
         credentials: "include",
+    },
+    user: {
+        additionalFields: {
+            connectionCode: "connectionCode",
+        }
     }
 })

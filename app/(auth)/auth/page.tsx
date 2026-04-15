@@ -1,9 +1,29 @@
 import { AuthForm } from "@/components/AuthForm";
 import { ChatPreview } from "@/components/ChatPreview";
 import { SocialLogin } from "@/components/SocialLogin";
+import { authClient } from "@/lib/auth-client";
 import Link from "next/dist/client/link";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
-export default function AuthPage() {
+export default async function AuthPage() {
+
+    let session = null;
+    try {
+        session = await authClient.getSession({
+            fetchOptions: {
+                headers: await headers()
+            }
+        });
+    }
+    catch (error) {
+        console.error("Erro ao verificar sessão:", error);
+    }
+
+    if (session?.data) {
+        redirect("/");
+    }
+
     return (
         <main className="bg-background min-h-screen grid lg:grid-cols-2">
                 <div className="hidden lg:flex flex-1 items-center justify-center bg-linear-to-br from-[#6C5CE7]/5 via-[#F8F5FF] to-[#00CEC9]/5 p-12 relative overflow-hidden">

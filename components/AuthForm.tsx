@@ -36,7 +36,7 @@ export const AuthForm = () => {
             })
 
             if (result.error) {
-                toastError({ title: "Erro de autenticação", description: result.error.message });
+                toastError({ title: "Erro de autenticação", description: "Ocorreu um erro ao tentar fazer login." });
             }
             else {
                 toastSuccess({ title: "Login bem-sucedido!", description: "Você entrou com sucesso." });
@@ -57,11 +57,11 @@ export const AuthForm = () => {
             })
 
             if (result.error) {
-                toastError({ title: "Erro de registro", description: result.error.message });
+                toastError({ title: "Erro de registro", description: "Ocorreu um erro ao tentar criar a conta." });
             }
             else {
-                toastSuccess({ title: "Registro bem-sucedido!", description: "Sua conta foi criada com sucesso. Faça login para continuar." });
-                setMode('login');
+                toastSuccess({ title: "Registro bem-sucedido!", description: "Sua conta foi criada com sucesso." });
+                router.push('/')
             }
         }
         catch {
