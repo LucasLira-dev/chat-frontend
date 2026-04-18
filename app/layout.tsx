@@ -4,6 +4,7 @@ import { AppToaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/lib/auth-context";
 import "./globals.css";
 import { Provider } from "./provider";
+import { RealtimeBridge } from "./RealtimeBridge";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,6 +35,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <Provider>
           <AuthProvider>
+            <RealtimeBridge />
             <AppToaster />
             {children}
           </AuthProvider>

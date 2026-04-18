@@ -3,7 +3,7 @@
 import { UserPlus } from "lucide-react"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog"
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { conversationsService } from "@/services/conversationsService";
 import { toastError, toastSuccess } from "./ui/sonner";
@@ -12,11 +12,13 @@ export const AddConnectionCode = () => {
 
     const [connectionCode, setConnectionCode] = useState("");
     const router = useRouter();
+    const queryClient = useQueryClient();
 
     const sendCodeMutation = useMutation({
         mutationFn: async (code: string) =>
             conversationsService.createConversation(code),
-            onSuccess: (data) => {
+            onSuccess: async (data) => {
+                await queryClient.invalidateQueries({ queryKey: ['myConversations'] });
                 toastSuccess({ title: "Sucesso", description: "Conversa criada com sucesso!" });
                 const conversationId = data.conversationId;                     
                 router.push(`/conversations/${conversationId}`);

@@ -48,6 +48,7 @@ export const conversationsService = {
             }
 
             const data: ConversationsResponse = await response.json();
+            console.log('Fetched conversations:', data);
             return data;
         }
         catch (error) {
@@ -55,4 +56,28 @@ export const conversationsService = {
             throw Error('Failed to fetch conversations');
         }
     },
+    deleteConversation: async (conversationId: string) => {
+        try {
+            const response = await fetch(`${API_URL}/conversations/${conversationId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to delete conversation');
+            }
+
+            return {
+                message: 'Conversation deleted successfully',
+            }
+        } 
+        catch (error) {
+            console.error('Error deleting conversation:', error);
+            throw Error('Failed to delete conversation');
+        }
+    }
 }

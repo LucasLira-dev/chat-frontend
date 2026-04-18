@@ -8,16 +8,16 @@ import { Button } from "./ui/button";
 
 import { MoreVertical } from "lucide-react"
 import { useConversations } from "@/hooks/useConversation";
+import { ConversationOptions } from "./ConversationOptions";
 
 interface NavBarProps {
     showConversationInfo?: boolean;
-    conversationId?: string;
+    conversationId: string;
 };
 
 export const NavBar = ({ showConversationInfo, conversationId }: NavBarProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const [isOnline, setIsOnline] = useState(true);
 
   const { conversations } = useConversations();
 
@@ -25,7 +25,7 @@ export const NavBar = ({ showConversationInfo, conversationId }: NavBarProps) =>
 
   const initials = currentConversation?.name?.slice(0, 2)?.toUpperCase() || "U";
   const displayName = currentConversation?.name || "Carregando...";
-  
+  const isOnline = currentConversation?.isOnline ?? false;
 
   return (
     <>
@@ -50,7 +50,13 @@ export const NavBar = ({ showConversationInfo, conversationId }: NavBarProps) =>
                         </div>
                         <div>
                             <p className="text-sm font-medium text-gray-900">{displayName}</p>
-                            <p className="text-xs text-gray-500">Online</p>
+                            {
+                              isOnline ? (
+                                <p className="text-xs text-green-500">Online</p>
+                              ) : (
+                                <p className="text-xs text-gray-500">Offline</p>
+                              )
+                            }
                         </div>
                     </div>
                     <DropdownMenu>
@@ -101,21 +107,16 @@ export const NavBar = ({ showConversationInfo, conversationId }: NavBarProps) =>
             </div>
             <div>
               <p className="text-sm font-semibold text-gray-900">{displayName}</p>
-              <p className="text-xs text-gray-500">Online</p>
+              {
+                isOnline ? (
+                  <p className="text-xs text-green-500">Online</p>
+                ) : (
+                  <p className="text-xs text-gray-500">Offline</p>
+                )
+              }
             </div>
           </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="cursor-pointer">
-                <MoreVertical size={18} />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-40" align="end">
-              <DropdownMenuLabel>Opções</DropdownMenuLabel>
-              <DropdownMenuItem className="cursor-pointer">Apagar mensagens</DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer">Apagar conversa</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <ConversationOptions conversationId={conversationId} />
         </div>
       )}
 

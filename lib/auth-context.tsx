@@ -16,6 +16,7 @@ interface AuthContextType {
   loading: boolean;
   error: Error | null;
   logout: () => Promise<void>;
+  refreshSession: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -25,46 +26,48 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
-  useEffect(() => {
-    const getSession = async () => {
-      try {
-        const { data } = await authClient.getSession();
-        if (data?.user) {
-          let connectionCode = data.user.connectionCode;
-          
-          // Se o connectionCode não veio da sessão, buscar do backend
-          if (!connectionCode && data.user.id) {
-            try {
-              const response = await fetch(
-                `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/user`,
-                {
-                  credentials: 'include',
-                }
-              );
-              if (response.ok) {
-                const userData = await response.json();
-                connectionCode = userData.connectionCode;
+  const refreshSession = async () => {
+    try {
+      setLoading(true);
+      const { data } = await authClient.getSession();
+      if (data?.user) {
+        let connectionCode = data.user.connectionCode;
+        
+        if (!connectionCode && data.user.id) {
+          try {
+            const response = await fetch(
+              `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/user`,
+              {
+                credentials: 'include',
               }
-            } catch (err) {
-              console.warn('Erro ao buscar connectionCode:', err);
+            );
+            if (response.ok) {
+              const userData = await response.json();
+              connectionCode = userData.connectionCode;
             }
+          } catch (err) {
+            console.warn('Erro ao buscar connectionCode:', err);
           }
-          
-          setUser({
-            id: data.user.id,
-            name: data.user.name || '',
-            email: data.user.email || '',
-            connectionCode: connectionCode || 'N/A',
-          });
         }
-      } catch (err) {
-        setError(err instanceof Error ? err : new Error('Failed to fetch session'));
-      } finally {
-        setLoading(false);
+        
+        setUser({
+          id: data.user.id,
+          name: data.user.name || '',
+          email: data.user.email || '',
+          connectionCode: connectionCode || 'N/A',
+        });
+      } else {
+        setUser(null);
       }
-    };
+    } catch (err) {
+      setError(err instanceof Error ? err : new Error('Failed to fetch session'));
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    getSession();
+  useEffect(() => {
+    refreshSession();
   }, []);
 
   const logout = async () => {
@@ -77,7 +80,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, error, logout }}>
+    <AuthContext.Provider value={{ user, loading, error, logout, refreshSession }}>
       {children}
     </AuthContext.Provider>
   );

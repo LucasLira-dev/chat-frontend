@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toastError, toastSuccess } from "./ui/sonner";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/lib/auth-context";
 
 export const AuthForm = () => {
 
@@ -17,6 +18,7 @@ export const AuthForm = () => {
     const [showLoginPassword, setShowLoginPassword] = useState(false);
 
     const router = useRouter();
+    const { refreshSession } = useAuth();
 
     const { register, handleSubmit: handleRegisterSubmit, formState: { errors: registerErrors, isSubmitting: registerIsSubmitting }} = useForm<RegisterData>({
         resolver: zodResolver(RegisterSchema),
@@ -40,6 +42,7 @@ export const AuthForm = () => {
             }
             else {
                 toastSuccess({ title: "Login bem-sucedido!", description: "Você entrou com sucesso." });
+                await refreshSession();
                 router.push('/')
             }
         }
@@ -61,6 +64,7 @@ export const AuthForm = () => {
             }
             else {
                 toastSuccess({ title: "Registro bem-sucedido!", description: "Sua conta foi criada com sucesso." });
+                await refreshSession();
                 router.push('/')
             }
         }
