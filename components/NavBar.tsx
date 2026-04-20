@@ -3,16 +3,12 @@
 import { useState } from "react";
 import { NavBarSheet } from "./NavBarSheet";
 import { NavBarContent } from "./NavBarContent";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "./ui/dropdown-menu";
-import { Button } from "./ui/button";
-
-import { MoreVertical } from "lucide-react"
 import { useConversations } from "@/hooks/useConversation";
 import { ConversationOptions } from "./ConversationOptions";
 
 interface NavBarProps {
     showConversationInfo?: boolean;
-    conversationId: string;
+    conversationId?: string;
 };
 
 export const NavBar = ({ showConversationInfo, conversationId }: NavBarProps) => {
@@ -59,18 +55,11 @@ export const NavBar = ({ showConversationInfo, conversationId }: NavBarProps) =>
                             }
                         </div>
                     </div>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="lg" className="cursor-pointer">
-                            <MoreVertical />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent className="w-40" align="end">
-                            <DropdownMenuLabel>Opções</DropdownMenuLabel>
-                            <DropdownMenuItem className="cursor-pointer"> Apagar mensagens </DropdownMenuItem>
-                            <DropdownMenuItem className="cursor-pointer"> Apagar conversa</DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                    <ConversationOptions
+                      conversationId={conversationId}
+                      buttonSize="lg"
+                      iconSize={24}
+                    />
                 </div>
             ) : (
                 <div className="flex items-center justify-between p-4">

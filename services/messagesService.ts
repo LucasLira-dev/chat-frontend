@@ -56,5 +56,28 @@ export const messagesService = {
             console.error('Error fetching messages:', error);
             throw Error('Failed to fetch messages');
         }
+    },
+    deleteMessages: async (conversationId: string) => {
+        try {
+            const response = await fetch(`${API_URL}/messages/${conversationId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                }, 
+                credentials: 'include',           
+            })
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to delete messages');
+            }
+
+            return {
+                message: 'Messages deleted successfully'
+            }
+        } catch(error) {
+            console.error('Error deleting messages:', error);
+            throw Error('Failed to delete messages');
+        }
     }
 }

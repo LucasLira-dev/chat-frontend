@@ -3,17 +3,20 @@
 import { useState } from "react";
 
 import { Send } from "lucide-react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { messagesService } from "@/services/messagesService";
 import { toastError } from "./ui/sonner";
 
 export const SendMessageButton = ({ conversationId }: { conversationId: string }) => {
 
     const [messageContent, setMessageContent] = useState("");
+    const queryClient = useQueryClient();
 
     const sendMessageMutation = useMutation({
         mutationFn: async (content: string) => messagesService.sendMessage(content, conversationId),
-        onSuccess: () => {
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['myMessages', conversationId] });
+            await queryClient.invalidateQueries({ queryKey: ['myConversations'] });
             console.log("Message sent successfully");
         },
         onError: (error) => {

@@ -50,7 +50,7 @@ export const NavBarContent = ({ searchQuery, setSearchQuery, onClose }: NavBarCo
     const smallConnectionCode = user ? user.connectionCode.slice(0, 8) : "N/A";
 
     return (
-        <div className="flex flex-col h-full bg-white">
+        <div className="flex flex-col h-full w-full bg-white">
               {/* Header */}
               <div className="p-4 border-b border-gray-200">
                 <div className="flex items-center justify-between mb-4">

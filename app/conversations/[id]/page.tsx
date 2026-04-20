@@ -30,7 +30,9 @@ export default async function ConversationPage({
   return (
     <div className="min-h-screen bg-gray-50">
       <NavBar showConversationInfo conversationId={conversationId} />
-      <ChatMessages conversationId={conversationId} />
+      <main className="bg-gray-50 md:ml-80 md:pt-16">
+        <ChatMessages conversationId={conversationId} />
+      </main>
     </div>
   );
 }
