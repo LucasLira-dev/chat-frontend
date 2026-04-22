@@ -35,7 +35,7 @@ export default async function Home() {
               Bem-vindo ao Chatwme!
             </h1>
             <p className="text-md text-gray-500">
-              Selecione uma conversa para começar a chamar
+              Selecione uma conversa para começar a conversar
             </p>
           </div>
         </div>

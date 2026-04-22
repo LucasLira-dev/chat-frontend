@@ -7,6 +7,7 @@ export type Conversation = {
         createdAt: Date | string;
     } | null;
     isOnline: boolean;
+    isTyping?: boolean;
 }
 
 export type ConversationsResponse = Conversation[];

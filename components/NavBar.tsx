@@ -22,6 +22,7 @@ export const NavBar = ({ showConversationInfo, conversationId }: NavBarProps) =>
   const initials = currentConversation?.name?.slice(0, 2)?.toUpperCase() || "U";
   const displayName = currentConversation?.name || "Carregando...";
   const isOnline = currentConversation?.isOnline ?? false;
+  const isTyping = currentConversation?.isTyping ?? false;
 
   return (
     <>
@@ -47,6 +48,9 @@ export const NavBar = ({ showConversationInfo, conversationId }: NavBarProps) =>
                         <div>
                             <p className="text-sm font-medium text-gray-900">{displayName}</p>
                             {
+                              isTyping ? (
+                                <p className="text-xs text-gray-500">Digitando...</p>
+                              ) :
                               isOnline ? (
                                 <p className="text-xs text-green-500">Online</p>
                               ) : (
@@ -97,6 +101,9 @@ export const NavBar = ({ showConversationInfo, conversationId }: NavBarProps) =>
             <div>
               <p className="text-sm font-semibold text-gray-900">{displayName}</p>
               {
+                isTyping ? (
+                  <p className="text-xs text-gray-500">Digitando...</p>
+                ) :
                 isOnline ? (
                   <p className="text-xs text-green-500">Online</p>
                 ) : (

@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/lib/auth-context";
-import { getSocket } from "@/lib/socket";
+import { getExistingSocket, getSocket } from "@/lib/socket";
 import { ConversationsResponse, Message, MessagesResponse } from "@/types";
 
 type PresenceUpdateEvent = {
@@ -19,15 +19,37 @@ type MessageNewEvent = {
     createdAt: string;
 };
 
+type TypingUpdateEvent = {
+    conversationId: string;
+    userId: string;
+    isTyping: boolean;
+}
+
 export const RealtimeBridge = () => {
     const { user } = useAuth();
     const queryClient = useQueryClient();
     const userId = user?.id;
+    const previousUserIdRef = useRef<string | null>(null);
 
     useEffect(() => {
-        if (!userId) return;
+        if (!userId) {
+            const existingSocket = getExistingSocket();
+
+            if (previousUserIdRef.current && existingSocket?.connected) {
+                existingSocket.disconnect();
+            }
+
+            previousUserIdRef.current = null;
+            return;
+        }
 
         const socket = getSocket();
+
+        if (previousUserIdRef.current && previousUserIdRef.current !== userId && socket.connected) {
+            socket.disconnect();
+        }
+
+        previousUserIdRef.current = userId;
 
         const handlePresenceUpdate = ({ userId: changeUserId, isOnline }: PresenceUpdateEvent) => {
             queryClient.setQueryData<ConversationsResponse | undefined>(
@@ -88,6 +110,19 @@ export const RealtimeBridge = () => {
             );
         };
 
+        const handleTypingUpdate = (event: TypingUpdateEvent) => {
+            queryClient.setQueryData<ConversationsResponse | undefined>(
+                ['myConversations', userId],
+                (current) =>
+                    current?.map((conversation) =>
+                        conversation.conversationId === event.conversationId &&
+                        conversation.otherUserId === event.userId 
+                            ? { ...conversation, isTyping: event.isTyping }
+                            : conversation
+                    ),
+            )
+        }
+
         const handleConnect = () => {
             queryClient.invalidateQueries({ queryKey: ['myConversations', userId] });
         };
@@ -95,6 +130,7 @@ export const RealtimeBridge = () => {
         socket.on('connect', handleConnect);
         socket.on('presence:update', handlePresenceUpdate);
         socket.on('message:new', handleMessageNew);
+        socket.on('typing:update', handleTypingUpdate);
 
         if (!socket.connected) {
             socket.connect();
@@ -104,7 +140,7 @@ export const RealtimeBridge = () => {
             socket.off('connect', handleConnect);
             socket.off('presence:update', handlePresenceUpdate);
             socket.off('message:new', handleMessageNew);
-            socket.disconnect();
+            socket.off('typing:update', handleTypingUpdate);
         };
     }, [queryClient, userId]);
 

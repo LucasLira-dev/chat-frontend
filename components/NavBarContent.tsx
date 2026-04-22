@@ -51,7 +51,6 @@ export const NavBarContent = ({ searchQuery, setSearchQuery, onClose }: NavBarCo
 
     return (
         <div className="flex flex-col h-full w-full bg-white">
-              {/* Header */}
               <div className="p-4 border-b border-gray-200">
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-3xl font-bold tracking-tight text-[#1A1A2E]">
@@ -79,7 +78,6 @@ export const NavBarContent = ({ searchQuery, setSearchQuery, onClose }: NavBarCo
                 </div>
               </div>
         
-              {/* Conversations List */}
               <div className="flex-1 overflow-y-auto">
                 {isLoading ? (
                   <div className="p-4 text-center text-gray-500 text-sm">
@@ -134,7 +132,6 @@ export const NavBarContent = ({ searchQuery, setSearchQuery, onClose }: NavBarCo
                 )}
               </div>
         
-              {/* Bottom User Section */}
               <div className="border-t border-gray-200 p-4 bg-gray-50">
                 {user && (
                   <div className="flex items-center gap-3 mb-3">
