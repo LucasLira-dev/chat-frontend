@@ -56,6 +56,38 @@ export const conversationsService = {
             throw Error('Failed to fetch conversations');
         }
     },
+    getOneConversation: async (conversationId: string, cookieHeader?: string) => {
+        try {
+            const requestHeaders: HeadersInit = {
+                'Content-Type': 'application/json',
+            };
+
+            if (cookieHeader) {
+                requestHeaders.cookie = cookieHeader;
+            }
+
+            const response = await fetch(`${API_URL}/conversations/${conversationId}`, {
+                method: 'GET',
+                headers: requestHeaders,
+                credentials: 'include',
+            });
+
+            if (response.status === 404) {
+                return null;
+            }
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => null);
+                throw new Error(errorData?.message || 'Failed to fetch conversation');
+            }
+
+            return await response.json();
+        }
+        catch (error) {
+            console.error('Error fetching conversation:', error);
+            throw error;
+        }
+    },
     deleteConversation: async (conversationId: string) => {
         try {
             const response = await fetch(`${API_URL}/conversations/${conversationId}`, {

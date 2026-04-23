@@ -81,10 +81,10 @@ export const SendMessageButton = ({ conversationId }: { conversationId: string }
     }
 
     return (
-        <div className="flex gap-2 p-4 bg-white border-t border-gray-200">
+        <div className="flex gap-2 border-t border-border bg-background p-4 transition-colors">
             <input 
                 type="text" 
-                className="flex-1 bg-primary/10 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#6C5CE7] focus:border-transparent placeholder:pl-2 p-2" 
+                className="flex-1 rounded-lg border border-border bg-muted/50 p-2 text-sm text-foreground placeholder:pl-2 placeholder:text-muted-foreground focus:border-transparent focus:outline-none focus:ring-2 focus:ring-[#6C5CE7]" 
                 placeholder="Digite sua mensagem..." 
                 value={messageContent}
                 onChange={(e) => {
@@ -138,7 +138,7 @@ export const SendMessageButton = ({ conversationId }: { conversationId: string }
                 }}
             />
             <button 
-                className="bg-[#5A4BCF] text-white p-2 rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center disabled:bg-gray-400 disabled:cursor-not-allowed"
+                className="flex items-center justify-center rounded-lg bg-[#5A4BCF] p-2 text-white transition-colors hover:bg-[#4b3fc0] disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground"
                 onClick={handleSendMessage}
                 disabled={messageContent.trim() === "" || sendMessageMutation.isPending}
             >

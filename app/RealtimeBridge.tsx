@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { useAuth } from "@/lib/auth-context";
+import { useAuth } from "@/contexts/auth-context";
 import { getExistingSocket, getSocket } from "@/lib/socket";
 import { ConversationsResponse, Message, MessagesResponse } from "@/types";
 
@@ -64,6 +64,12 @@ export const RealtimeBridge = () => {
         };
 
         const handleMessageNew = (event: MessageNewEvent) => {
+            const conversationsKey = ['myConversations', userId] as const;
+            const currentConversations = queryClient.getQueryData<ConversationsResponse | undefined>(conversationsKey);
+            const hasConversationInList = currentConversations?.some(
+                (conversation) => conversation.conversationId === event.conversationId,
+            ) ?? false;
+
             queryClient.setQueryData<MessagesResponse | undefined>(
                 ['myMessages', event.conversationId],
                 (current) => {
@@ -89,8 +95,13 @@ export const RealtimeBridge = () => {
                 },
             );
 
+            if (event.senderId !== userId && !hasConversationInList) {
+                void queryClient.invalidateQueries({ queryKey: conversationsKey });
+                return;
+            }
+
             queryClient.setQueryData<ConversationsResponse | undefined>(
-            ['myConversations', userId],
+            conversationsKey,
             (current) =>
                 current?.map((conversation) => 
                     conversation.conversationId === event.conversationId

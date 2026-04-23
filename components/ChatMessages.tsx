@@ -25,10 +25,10 @@ export const ChatMessages = ({ conversationId }: { conversationId: string }) => 
         return (
             <div className="flex h-[calc(100dvh-4rem)] items-center justify-center p-4">
                 <div className="text-center">
-                    <h1 className="text-2xl font-bold text-gray-900 mb-4">
+                    <h1 className="mb-4 text-2xl font-bold text-foreground">
                         Ocorreu um erro ao carregar as mensagens
                     </h1>
-                    <p className="text-lg text-gray-600">
+                    <p className="text-lg text-muted-foreground">
                         Tente recarregar a página ou selecione outra conversa
                     </p>
                 </div>
@@ -37,15 +37,15 @@ export const ChatMessages = ({ conversationId }: { conversationId: string }) => 
     }
 
     return (
-        <div className="flex h-[calc(100dvh-4rem)] flex-col bg-gray-50">
+        <div className="flex h-[calc(100dvh-4rem)] flex-col bg-background transition-colors">
             {
                 messages?.length === 0 ? (
                     <div className="flex flex-1 items-center justify-center p-4">
                         <div className="text-center">
-                            <h1 className="text-2xl font-bold text-gray-900 mb-4">
+                            <h1 className="mb-4 text-2xl font-bold text-foreground">
                                 Nenhuma mensagem ainda
                             </h1>
-                            <p className="text-lg text-gray-600">
+                            <p className="text-lg text-muted-foreground">
                                 Envie uma mensagem para começar a conversar
                             </p>
                         </div>
@@ -56,10 +56,10 @@ export const ChatMessages = ({ conversationId }: { conversationId: string }) => 
                             {messages?.map((msg) => {
                                 return (
                                 <div key={msg.messageId} className={`flex ${msg.itsme ? 'justify-end' : 'justify-start'}`}>
-                                    <div className={`max-w-xs p-3 rounded-lg ${msg.itsme ? 'bg-[#6C5CE7] text-white' : 'bg-gray-200 text-gray-900'}`}>
+                                    <div className={`max-w-xs rounded-lg p-3 shadow-sm ${msg.itsme ? 'bg-[#6C5CE7] text-white' : 'bg-muted text-foreground'}`}>
                                         <p>{msg.content}</p>
                                         <div className="flex gap-2 items-center mt-2">
-                                            <span className={`text-xs ${msg.itsme ? 'text-blue-100' : 'text-gray-500'} block text-right`}>
+                                            <span className={`block text-right text-xs ${msg.itsme ? 'text-blue-100' : 'text-muted-foreground'}`}>
                                                 {formatTime(msg.createdAt) || ''}
                                             </span>
                                             {
@@ -67,7 +67,7 @@ export const ChatMessages = ({ conversationId }: { conversationId: string }) => 
                                                     msg.readAt ? (
                                                         <CheckCheck size={16} className="text-green-300" />
                                                     ) : (
-                                                        <Check size={16} className="text-white-500" />
+                                                        <Check size={16} className="text-white/80" />
                                                     )
                                                 )
                                             }

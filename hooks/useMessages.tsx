@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query"
 import { messagesService } from "@/services/messagesService"
-import { useAuth } from "@/lib/auth-context";
+import { useAuth } from "@/contexts/auth-context";
 
 export const useMessages = (conversationId?: string) => {
     const { user } = useAuth();

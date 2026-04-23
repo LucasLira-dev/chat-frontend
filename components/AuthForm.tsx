@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toastError, toastSuccess } from "./ui/sonner";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/lib/auth-context";
+import { useAuth } from "@/contexts/auth-context";
 
 export const AuthForm = () => {
 
@@ -81,20 +81,20 @@ export const AuthForm = () => {
                         <div className="w-12 h-12 rounded-2xl bg-[#6C5CE7] flex items-center justify-center shadow-lg shadow-[#6C5CE7]/30">
                             <MessageCircle className="w-6 h-6 text-white" />
                         </div>
-                        <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-[#00CEC9] border-2 border-[#F8F5FF]" />
+                        <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-[#F8F5FF] bg-[#00CEC9] dark:border-[#111723]" />
                     </div>
-                    <span className="text-3xl font-bold tracking-tight text-[#1A1A2E]">
+                    <span className="text-3xl font-bold tracking-tight text-[#1A1A2E] dark:text-white">
                         Chat<span className="text-[#6C5CE7]">wme</span>
                     </span>
                 </div>
             </div>
 
-            <p className="text-[#6B6B8D] text-sm mb-7 text-center leading-relaxed">
+            <p className="mb-7 text-center text-sm leading-relaxed text-[#6B6B8D] dark:text-[#A7AEC6]">
                 {mode === 'login' ? 'Bem-vindo de volta! Entre para continuar conversando.' : 'Crie sua conta e comece a conversar agora.'}
             </p>
 
             <Tabs defaultValue="login" className="w-full">
-                <TabsList className="w-full min-h-14 bg-primary/10 border border-[#E0D8F0] rounded-xl p-1">
+                <TabsList className="w-full min-h-14 rounded-xl border border-[#E0D8F0] bg-primary/10 p-1 dark:border-[#31384D] dark:bg-[#161C2A]">
                     <TabsTrigger value="login" className="p-2 cursor-pointer rounded-lg" onClick={() => setMode("login")}>Entrar</TabsTrigger>
                     <TabsTrigger value="register" className="p-2 cursor-pointer rounded-lg" onClick={() => setMode("register")}>Cadastrar</TabsTrigger>
                 </TabsList>
@@ -105,7 +105,7 @@ export const AuthForm = () => {
                             <input
                                 type="email"
                                 placeholder="seu@email.com"
-                                className="w-full p-4 bg-primary/10 border border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6C5CE7] focus:border-transparent pl-12"
+                                className="w-full rounded-xl border border-transparent bg-primary/10 p-4 pl-12 text-foreground placeholder:text-foreground/50 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-[#6C5CE7]"
                                 {...loginRegister('email')}
                             />
                             <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/50 w-5 h-5" />
@@ -120,7 +120,7 @@ export const AuthForm = () => {
                             <input
                                 type={showLoginPassword ? "text" : "password"}
                                 placeholder="sua senha"
-                                className="w-full p-4 bg-primary/10 border border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6C5CE7] focus:border-transparent pl-12"
+                                className="w-full rounded-xl border border-transparent bg-primary/10 p-4 pl-12 text-foreground placeholder:text-foreground/50 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-[#6C5CE7]"
                                 {...loginRegister('password')}
                             />
                             <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/50 w-5 h-5" />
@@ -152,7 +152,7 @@ export const AuthForm = () => {
                             <input
                                 type="text"
                                 placeholder="seu nome"
-                                className="w-full p-4 bg-primary/10 border border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6C5CE7] focus:border-transparent pl-12"
+                                className="w-full rounded-xl border border-transparent bg-primary/10 p-4 pl-12 text-foreground placeholder:text-foreground/50 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-[#6C5CE7]"
                                 {...register('name')}
 
                             />
@@ -167,7 +167,7 @@ export const AuthForm = () => {
                             <input
                                 type="email"
                                 placeholder="seu email"
-                                className="w-full p-4 bg-primary/10 border border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6C5CE7] focus:border-transparent pl-12"
+                                className="w-full rounded-xl border border-transparent bg-primary/10 p-4 pl-12 text-foreground placeholder:text-foreground/50 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-[#6C5CE7]"
                                 {...register('email')}
                             />
                             <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/50 w-5 h-5" />
@@ -181,7 +181,7 @@ export const AuthForm = () => {
                             <input
                                 type={showRegisterPassword ? "text" : "password"}
                                 placeholder="sua senha"
-                                className="w-full p-4 bg-primary/10 border border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6C5CE7] focus:border-transparent pl-12"
+                                className="w-full rounded-xl border border-transparent bg-primary/10 p-4 pl-12 text-foreground placeholder:text-foreground/50 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-[#6C5CE7]"
                                 {...register('password')}
                             />
                             <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/50 w-5 h-5" />

@@ -23,7 +23,7 @@ export default async function Home() {
   
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background transition-colors">
       <NavBar/>
       <main className="md:ml-80 ml-0 pt-16">
         <div className="flex flex-col items-center justify-center h-[calc(100vh-64px)] md:h-screen">
@@ -31,10 +31,10 @@ export default async function Home() {
             <MessageCircle size={42} className="text-[#6C5CE7]" />
           </div>
           <div className="text-center">
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">
+            <h1 className="text-2xl font-bold text-foreground mb-2">
               Bem-vindo ao Chatwme!
             </h1>
-            <p className="text-md text-gray-500">
+            <p className="text-md text-muted-foreground">
               Selecione uma conversa para começar a conversar
             </p>
           </div>

@@ -26,7 +26,7 @@ export const NavBar = ({ showConversationInfo, conversationId }: NavBarProps) =>
 
   return (
     <>
-      <div className="md:hidden fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-40">
+      <div className="md:hidden fixed top-0 left-0 right-0 z-40 border-b border-border bg-background/95 backdrop-blur transition-colors">
         {
             showConversationInfo ? (
                 <div className="flex items-center gap-8 p-4 w-full justify-between">
@@ -42,19 +42,19 @@ export const NavBar = ({ showConversationInfo, conversationId }: NavBarProps) =>
                             {initials}
                           </div>
                           {isOnline && (
-                            <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white" />
+                            <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-background" />
                           )}
                         </div>
                         <div>
-                            <p className="text-sm font-medium text-gray-900">{displayName}</p>
+                            <p className="text-sm font-medium text-foreground">{displayName}</p>
                             {
                               isTyping ? (
-                                <p className="text-xs text-gray-500">Digitando...</p>
+                                <p className="text-xs text-muted-foreground">Digitando...</p>
                               ) :
                               isOnline ? (
                                 <p className="text-xs text-green-500">Online</p>
                               ) : (
-                                <p className="text-xs text-gray-500">Offline</p>
+                                <p className="text-xs text-muted-foreground">Offline</p>
                               )
                             }
                         </div>
@@ -73,14 +73,14 @@ export const NavBar = ({ showConversationInfo, conversationId }: NavBarProps) =>
                         searchQuery={searchQuery}
                         setSearchQuery={setSearchQuery}
                     />
-                    <h1 className="text-lg font-bold text-gray-900">Chatwme</h1>
+                    <h1 className="text-lg font-bold text-foreground">Chatwme</h1>
                     <div className="w-10" />
                 </div>
             )
         }
       </div>
 
-      <div className="hidden md:flex fixed left-0 top-0 bottom-0 w-80 bg-white border-r border-gray-200 z-40">
+      <div className="hidden md:flex fixed left-0 top-0 bottom-0 w-80 border-r border-border bg-background transition-colors z-40">
         <NavBarContent
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
@@ -88,26 +88,26 @@ export const NavBar = ({ showConversationInfo, conversationId }: NavBarProps) =>
       </div>
 
       {showConversationInfo && (
-        <div className="hidden md:flex fixed top-0 left-80 right-0 bg-white border-b border-gray-200 z-40 items-center gap-3 p-4 h-16 justify-between">
+        <div className="hidden md:flex fixed top-0 left-80 right-0 z-40 h-16 items-center justify-between gap-3 border-b border-border bg-background/95 p-4 backdrop-blur transition-colors">
           <div className="flex items-center gap-3">
             <div className="relative shrink-0">
               <div className="w-12 h-12 rounded-full bg-blue-500 text-white flex items-center justify-center font-semibold">
                 {initials}
               </div>
               {isOnline && (
-                <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white" />
+                <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-background" />
               )}
             </div>
             <div>
-              <p className="text-sm font-semibold text-gray-900">{displayName}</p>
+              <p className="text-sm font-semibold text-foreground">{displayName}</p>
               {
                 isTyping ? (
-                  <p className="text-xs text-gray-500">Digitando...</p>
+                  <p className="text-xs text-muted-foreground">Digitando...</p>
                 ) :
                 isOnline ? (
                   <p className="text-xs text-green-500">Online</p>
                 ) : (
-                  <p className="text-xs text-gray-500">Offline</p>
+                  <p className="text-xs text-muted-foreground">Offline</p>
                 )
               }
             </div>

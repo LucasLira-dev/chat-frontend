@@ -5,11 +5,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { Button } from "./ui/button";
-import { useAuth } from "@/lib/auth-context";
-import { Dialog, DialogTrigger } from "./ui/dialog";
+import { useAuth } from "@/contexts/auth-context";
 import { AddConnectionCode } from "./AddConnectionCode";
-import { useQuery } from "@tanstack/react-query";
-import { conversationsService } from "@/services/conversationsService";
 import { Conversation } from "@/types";
 import { useConversations } from "@/hooks/useConversation";
 import { formatTime } from "@/lib/utils";
@@ -50,10 +47,10 @@ export const NavBarContent = ({ searchQuery, setSearchQuery, onClose }: NavBarCo
     const smallConnectionCode = user ? user.connectionCode.slice(0, 8) : "N/A";
 
     return (
-        <div className="flex flex-col h-full w-full bg-white">
-              <div className="p-4 border-b border-gray-200">
+        <div className="flex h-full w-full flex-col bg-background transition-colors">
+              <div className="border-b border-border p-4">
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-3xl font-bold tracking-tight text-[#1A1A2E]">
+                  <span className="text-3xl font-bold tracking-tight text-foreground">
                     Chat<span className="text-[#6C5CE7]">wme</span>
                   </span>
                   <div className="flex items-center gap-4">
@@ -67,20 +64,20 @@ export const NavBarContent = ({ searchQuery, setSearchQuery, onClose }: NavBarCo
                 </div>
 
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={18} />
                   <input
                     type="text"
                     placeholder="Procurar conversa..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 bg-primary/10 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#6C5CE7] focus:border-transparent"
+                    className="w-full rounded-lg border border-border bg-muted/50 py-2 pr-4 pl-10 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[#6C5CE7] focus:border-transparent"
                   />
                 </div>
               </div>
         
               <div className="flex-1 overflow-y-auto">
                 {isLoading ? (
-                  <div className="p-4 text-center text-gray-500 text-sm">
+                  <div className="p-4 text-center text-sm text-muted-foreground">
                     Carregando conversas...
                   </div>
                 ) : isError ? (
@@ -88,7 +85,7 @@ export const NavBarContent = ({ searchQuery, setSearchQuery, onClose }: NavBarCo
                     Erro ao carregar conversas.
                   </div>
                 ) : filteredConversations.length === 0 ? (
-                  <div className="p-4 text-center text-gray-500 text-sm">
+                  <div className="p-4 text-center text-sm text-muted-foreground">
                     Nenhuma conversa encontrada
                   </div>
                 ) : (
@@ -99,30 +96,28 @@ export const NavBarContent = ({ searchQuery, setSearchQuery, onClose }: NavBarCo
                         router.push(`/conversations/${conversation.conversationId}`);
                         onClose?.();
                       }}
-                      className="w-full p-4 border-b border-gray-100 hover:bg-primary/10 transition-colors text-left cursor-pointer"
+                      className="w-full cursor-pointer border-b border-border/60 p-4 text-left transition-colors hover:bg-muted/60"
                     >
                       <div className="flex items-start gap-3">
-                        {/* Avatar */}
                         <div className="relative shrink-0">
                           <div className="w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center font-semibold text-sm">
                             {conversation.name.slice(0, 2).toUpperCase()}
                           </div>
                           {conversation.isOnline && (
-                            <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white" />
+                            <div className="absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-background bg-green-500" />
                           )}
                         </div>
         
-                        {/* Content */}
                         <div className="flex-1 min-w-0">
                           <div className="flex justify-between items-start mb-1">
-                            <h3 className="font-semibold text-gray-900 text-sm">
+                            <h3 className="text-sm font-semibold text-foreground">
                               {conversation.name}
                             </h3>
-                            <span className="text-xs text-gray-500 ml-2">
+                            <span className="ml-2 text-xs text-muted-foreground">
                               {conversation.lastMessage?.createdAt ? formatTime(conversation.lastMessage.createdAt) : ""}
                             </span>
                           </div>
-                          <p className="text-xs text-gray-600 truncate">
+                          <p className="truncate text-xs text-muted-foreground">
                             {conversation.lastMessage?.content || "Nenhuma mensagem ainda."}
                           </p>
                         </div>
@@ -132,29 +127,29 @@ export const NavBarContent = ({ searchQuery, setSearchQuery, onClose }: NavBarCo
                 )}
               </div>
         
-              <div className="border-t border-gray-200 p-4 bg-gray-50">
+              <div className="border-t border-border bg-muted/20 p-4 transition-colors">
                 {user && (
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 rounded-full bg-gray-400 text-white flex items-center justify-center font-semibold text-sm">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted text-sm font-semibold text-foreground">
                       {initials}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-gray-900 text-sm truncate">
+                      <p className="truncate text-sm font-semibold text-foreground">
                         {user.name}
                       </p>
                       <div className="flex items-center gap-2">
-                          <code className="text-xs font-mono text-gray-700 truncate line-clamp-1">
+                          <code className="line-clamp-1 truncate text-xs font-mono text-muted-foreground">
                               {smallConnectionCode}
                           </code>
                         <button
                         onClick={handleCopyCode}
-                        className="p-1 hover:bg-gray-100 rounded transition-colors cursor-pointer"
+                        className="cursor-pointer rounded p-1 transition-colors hover:bg-muted"
                         title="Copiar código"
                         >
                             {copiedCode ? (
                                 <Check size={16} className="text-green-500" />
                             ) : (
-                                <Copy size={16} className="text-gray-primary/10" />
+                                <Copy size={16} className="text-muted-foreground" />
                             )}
                         </button>
                       </div>

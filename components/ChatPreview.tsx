@@ -18,11 +18,11 @@ export function ChatPreview() {
         initial={{ opacity: 0, y: 40, rotateY: -15 }}
         animate={{ opacity: 1, y: 0, rotateY: 0 }}
         transition={{ duration: 0.8, delay: 0.2 }}
-        className="relative bg-white rounded-[40px] p-3 shadow-2xl shadow-[#6C5CE7]/20"
+        className="relative rounded-[40px] bg-white p-3 shadow-2xl shadow-[#6C5CE7]/20 transition-colors dark:bg-[#0F1726]"
         style={{ perspective: "1000px" }}
       >
         {/* Screen */}
-        <div className="bg-[#F8F5FF] rounded-4xl overflow-hidden">
+        <div className="overflow-hidden rounded-4xl bg-[#F8F5FF] transition-colors dark:bg-[#111723]">
           {/* Header */}
           <div className="bg-[#6C5CE7] px-6 py-4 flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
@@ -51,7 +51,7 @@ export function ChatPreview() {
                   className={`max-w-[75%] px-4 py-2.5 rounded-2xl text-sm ${
                     message.sender === "user"
                       ? "bg-[#6C5CE7] text-white rounded-br-md"
-                      : "bg-white text-[#1A1A2E] rounded-bl-md shadow-sm"
+                      : "rounded-bl-md bg-white text-[#1A1A2E] shadow-sm dark:bg-[#1C2434] dark:text-white"
                   }`}
                 >
                   {message.text}
@@ -66,7 +66,7 @@ export function ChatPreview() {
               transition={{ delay: 2.5 }}
               className="flex justify-start"
             >
-              <div className="bg-white px-4 py-3 rounded-2xl rounded-bl-md shadow-sm flex gap-1">
+              <div className="flex gap-1 rounded-2xl rounded-bl-md bg-white px-4 py-3 shadow-sm transition-colors dark:bg-[#1C2434]">
                 <motion.div
                   className="w-2 h-2 bg-[#6B6B8D] rounded-full"
                   animate={{ y: [0, -5, 0] }}
@@ -88,8 +88,8 @@ export function ChatPreview() {
 
           {/* Input Bar */}
           <div className="px-4 pb-4">
-            <div className="bg-white rounded-full px-4 py-3 flex items-center gap-2 shadow-sm">
-              <span className="text-[#6B6B8D] text-sm flex-1">Digite uma mensagem...</span>
+            <div className="flex items-center gap-2 rounded-full bg-white px-4 py-3 shadow-sm transition-colors dark:bg-[#1C2434]">
+              <span className="flex-1 text-sm text-[#6B6B8D] dark:text-[#A7AEC6]">Digite uma mensagem...</span>
               <div className="w-8 h-8 rounded-full bg-[#6C5CE7] flex items-center justify-center">
                 <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />

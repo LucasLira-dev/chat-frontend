@@ -1,61 +1,108 @@
-"use client";
-
+import Link from "next/link";
+import {
+  ArrowLeft,
+  ShieldAlert,
+  UserRound,
+} from "lucide-react";
 import { NavBar } from "@/components/NavBar";
-import { Button } from "@/components/ui/button";
+import { DeleteAccount } from "@/components/DeleteAccount";
+import { Logout } from "@/components/Logout";
+import { UpdateNickname } from "@/components/UpdateNickname";
+import { SimpleCards } from "@/components/SimpleCard";
+import { SectionHeader } from "@/components/SectionHeader";
+import { UpdateTheme } from "@/components/UpdateTheme";
+import { authClient } from "@/lib/auth-client";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
-export default function SettingsPage() {
+
+export default async function SettingsPage() {
+
+  let session = null;
+
+  try {
+    session = await authClient.getSession({
+      fetchOptions: {
+        headers: await headers(),
+      }
+    });
+  } catch (error) {
+    console.error("Error fetching session:", error);
+  }
+
+  if (session?.data === null) {
+    redirect("/auth");
+  }
+
+  const nickname = session?.data?.user?.name || "";
+
+  const nicknamePreview = nickname.trim() || "Seu nickname";
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <NavBar />
+    <>
+      <div className="min-h-screen bg-[#F6F7FB] transition-colors dark:bg-[#0F1320]">
+        <NavBar />
 
-      {/* Main Content Area */}
-      <main className="md:ml-80 ml-0 pt-16 md:pt-0">
-        <div className="max-w-2xl mx-auto p-4 md:p-8">
-          <div className="bg-white rounded-lg shadow p-6">
-            <h1 className="text-3xl font-bold text-gray-900 mb-8">
-              Configurações
-            </h1>
+        <main className="ml-0 pt-16 md:ml-80 md:pt-0">
+          <div className="mx-auto max-w-5xl p-4 md:p-8">
+            <div className="relative overflow-hidden rounded-[32px] border border-[#E8EAF4] bg-white shadow-[0_24px_80px_rgba(22,27,45,0.08)] transition-colors dark:border-[#2D3447] dark:bg-[#151A28] dark:shadow-none">
 
-            {/* Profile Settings */}
-            <section className="mb-8 pb-8 border-b border-gray-200">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                Perfil
-              </h2>
-              <p className="text-gray-600">
-                Manage your profile information and preferences here.
-              </p>
-            </section>
+              <div className="relative p-5 md:p-8">
+                <Link
+                  href="/"
+                  className="inline-flex items-center gap-2 text-sm text-[#6D7388] transition-colors hover:text-[#181C2A] dark:text-[#98A0BC] dark:hover:text-white"
+                >
+                  <ArrowLeft className="size-4" />
+                  Voltar para as conversas
+                </Link>
 
-            {/* Privacy Settings */}
-            <section className="mb-8 pb-8 border-b border-gray-200">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                Privacidade
-              </h2>
-              <p className="text-gray-600">
-                Control your privacy settings and who can contact you.
-              </p>
-            </section>
+                <div className="mt-4 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+                  <div>
+                    <h1 className="text-3xl font-bold tracking-tight text-[#181C2A] dark:text-white">
+                      Configurações
+                    </h1>
+                    <p className="mt-2 max-w-2xl text-sm text-[#6D7388] dark:text-[#A7AEC6]">
+                      Uma central simples para editar seu nickname, alternar o
+                      modo da interface e deixar as ações de conta prontas para
+                      integração.
+                    </p>
+                  </div>
 
-            {/* Notifications */}
-            <section className="mb-8">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                Notificações
-              </h2>
-              <p className="text-gray-600">
-                Customize your notification preferences.
-              </p>
-            </section>
+                  <SimpleCards nicknamePreview={nicknamePreview} />
 
-            {/* Save Button */}
-            <div className="flex gap-3">
-              <Button className="bg-blue-500 hover:bg-blue-600">
-                Salvar Alterações
-              </Button>
-              <Button variant="outline">Cancelar</Button>
+           </div>   
+                <div className="mt-8 space-y-5">
+                  <section className="rounded-[28px] border border-[#E8EAF4] bg-[#FCFCFE] p-5 transition-colors dark:border-[#2E3548] dark:bg-[#101522]">
+                    <SectionHeader
+                      icon={UserRound}
+                      title="Nickname"
+                      description="Campo visual pronto para você conectar ao update do perfil."
+                    />
+                    <UpdateNickname nickname={nicknamePreview} />
+                  </section>
+
+                 <UpdateTheme />
+
+                  <section className="rounded-[28px] border border-[#E8EAF4] bg-[#FCFCFE] p-5 transition-colors dark:border-[#2E3548] dark:bg-[#101522]">
+                    <SectionHeader
+                      icon={ShieldAlert}
+                      title="Conta"
+                      description="Ações visuais de sessão e exclusão, prontas para receber seus handlers."
+                    />
+
+                    <div className="mt-5 grid gap-3">
+                      <Logout />
+                      <DeleteAccount />
+                    </div>
+                  </section>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </main>
-    </div>
+        </main>
+      </div>
+
+     
+    </>
   );
 }

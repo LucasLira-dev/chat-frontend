@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { AppToaster } from "@/components/ui/sonner";
-import { AuthProvider } from "@/lib/auth-context";
+import { AuthProvider } from "@/contexts/auth-context";
 import "./globals.css";
 import { Provider } from "./provider";
 import { RealtimeBridge } from "./RealtimeBridge";
+import { ThemeProvider } from "@/contexts/theme-context";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,7 +34,8 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col bg-background text-foreground transition-colors">
+        <ThemeProvider>
         <Provider>
           <AuthProvider>
             <RealtimeBridge />
@@ -41,6 +43,7 @@ export default function RootLayout({
             {children}
           </AuthProvider>
         </Provider>
+        </ThemeProvider>
       </body>
     </html>
   );
